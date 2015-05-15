@@ -8,9 +8,11 @@
     var JsonCookie = {
 	  
 	  //constructor	
-      init: function(name, elem) {
+      init: function(name, elem, expires) {
       	this.cookieName = name;
+      	this.expireOnUnload = expires;
       	this.gat = elem; //element to cause array join thus far
+      	this.bindEvents();//returns array of pages when triggered
         this.bigEnchilada(); 
       },
 
@@ -35,7 +37,11 @@
       },
 
       deleteCookie: function() {
-		document.cookie = this.cookieName + '=; expires=Thu, 01-Jan-70 00:00:01 GMT;';
+		if(this.expireOnUnload){
+			window.onbeforeunload = function(){
+  				document.cookie = this.cookieName + '=; expires=Thu, 01-Jan-70 00:00:01 GMT;';
+			};
+		}
 	  },
       
       mainCookie: function() {
@@ -71,9 +77,10 @@
 
         bindEvents: function(event) {
         	this.gat.on("click", ".shpSCtrack-scAdd", $.proxy(function() {
-            var sku = s.products;// TODO : remove amd clean
+              var sku = s.products;// TODO : remove amd clean
         	  var arr = JsonCookie.mainCookie(); 	
         	  var newArr = arr.pathArr.join() + " " + sku;
+        	  JsonCookie.deleteCookie();
         	  return newArr;
         	  console.log(newArr); 
         	  
@@ -82,9 +89,10 @@
       
     
       };//end prototype
-  
-	  JsonCookie.init("testest", $("#sr-products") );//switch out with your cookie name and element
-	  JsonCookie.bindEvents();//returns array of pages when triggered
+
+  	  //switch out with your cookie name and element that is to terminate cookie and join page array	
+	  JsonCookie.init("testest", $("#sr-products"), true );
+
 
 
 })();
