@@ -1,11 +1,16 @@
+/*
+* SIMPLE SCRIPT TO TRACK PAGES UNTIL TERMINATED BY ELEMENT EVENT
+* BY ANDRES O. SERANO TWITTER: O_SERRANOP
+* WORK IN PROGRESS..
+*/
 (function() {
 
     var JsonCookie = {
 	  
 	  //constructor	
-      init: function(name) {
+      init: function(name, elem) {
       	this.cookieName = name;
-      	this.gat = $("#sr-products");
+      	this.gat = elem; //element to cause array join thus far
         this.bigEnchilada(); 
       },
 
@@ -44,6 +49,8 @@
         JsonCookie.saveCookie(cTrail); 
       },
       
+      //checks for existing cookie to append current page info to (trail)
+      //or creates new cookie!
       bigEnchilada: function() {
           if(JsonCookie.hasCookie()) {
   
@@ -64,9 +71,10 @@
 
         bindEvents: function(event) {
         	this.gat.on("click", ".shpSCtrack-scAdd", $.proxy(function() {
-              var sku = s.products;
+            var sku = s.products;// TODO : remove amd clean
         	  var arr = JsonCookie.mainCookie(); 	
         	  var newArr = arr.pathArr.join() + " " + sku;
+        	  return newArr;
         	  console.log(newArr); 
         	  
         	}, this));
@@ -75,8 +83,8 @@
     
       };//end prototype
   
-	  JsonCookie.init("testest");
-	  JsonCookie.bindEvents();
+	  JsonCookie.init("testest", $("#sr-products") );//switch out with your cookie name and element
+	  JsonCookie.bindEvents();//returns array of pages when triggered
 
 
 })();
