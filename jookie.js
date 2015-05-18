@@ -55,7 +55,7 @@
 
   appendNewLocation: function() { 
     var cTrail = JSON.parse($.cookie(this.cookieName)); 
-    var trail = s.prop1 + ": " + window.location.pathname.replace("/", "") + " > ";
+    var trail = JsonCookie.trail();
     cTrail.pathArr.push(trail); 
     JsonCookie.saveCookie(cTrail); 
   },
